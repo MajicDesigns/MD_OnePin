@@ -1,0 +1,8 @@
+{signal:
+ [
+  {name: 'T', wave:'=3.=.3.=.3.', data:"T0 T1 T2 T3 T4 T5 T6"},
+  {name: 'I/O (1)', wave:'10....1....' },
+  {name: 'I/O (0)', wave:'10....10.1.' },
+ ],
+   foot: {text: 'Read Signal 1/0 Signal'},
+}

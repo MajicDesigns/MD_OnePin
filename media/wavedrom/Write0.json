@@ -1,0 +1,7 @@
+{signal:
+ [
+  {name: 'T', wave:'=3.=.3.', data:"T0 T1 T2 T3 T4 T5"},
+  {name: 'I/O', wave:'10.1...' },
+ ],
+   foot: {text: 'Write 0 Signal'},
+}

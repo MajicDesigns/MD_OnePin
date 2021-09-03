@@ -1,0 +1,18 @@
+#######################################
+# Syntax Coloring Map
+#######################################
+
+#######################################
+# Classes and datatypes (KEYWORD1)
+#######################################
+MD_OnePin	KEYWORD1
+
+#######################################
+# Methods and functions (KEYWORD2)
+#######################################
+begin	KEYWORD2
+write	KEYWORD2
+read	KEYWORD2
+isPresent	KEYWORD2
+
+
