@@ -2,45 +2,45 @@
 /**
 \page pageLinkSignals Link Signaling Protocol
 ## Overview
-OnePin is a communications link is between a Primary device (PRI) and a Secondary 
-device (SEC). The PRI is assumed to have more computational power be more capable 
-than the SEC, which is envisaged as a small embedded processor providing local 
-control for a sensor or actuator.
+OnePin is a communications link is between a Primary device (PRI) and a 
+Secondary device (SEC). The PRI is assumed to have more computational power 
+be more capable than the SEC, which is envisaged as a small embedded 
+processor providing local control for a sensor or actuator.
 
-OnePin operates using just one I/O pin and electrical ground per device pair, 
-switching the direction of signal flow according to a timer based protocol 
-implemented in both the PRI and SEC. The electrical connections is dependent 
-on the hardware implementation, which primarily needs to ensure that the digital 
-HIGH and LOW signal voltages are are compatible between devices.
+OnePin works using just one digital I/O pin and electrical ground per device 
+pair, switching the direction of signal flow according to a timer based 
+protocol implemented in both the PRI and SEC. The electrical connection 
+depends on the hardware implementation, which mainly needs to ensure that 
+the digital HIGH and LOW signal voltages are are compatible between devices.
 
 Electrically, the link is idle HIGH and communications is effected by pulling 
 the link LOW. When the I/O pins are set to input mode in the PRI or SEC they 
-are be pulled HIGH using the processor's internal pullup resistors (INPUT_PULLUP).
-However, a external pullup is also possible and compatible withe the oprations of 
+are pulled HIGH using internal pullup resistors (INPUT_PULLUP). However, an 
+external pullup is also possible and compatible with the operations of 
 the OnePin library.
 
-The communications link timing is divided into fixed time slots (T) and all 
-protocol timing is expressed as as multiples of T. There is no system clock - 
-communications are synchronized to the falling edge of PRI. This means that 
-PRI timing should be more accurate than SEC timing, which only responds to PRI.
+The communications link timing is divided into fixed time slots T microseconds
+(&micro;s) long and all protocol timing is expressed as as multiples of T. 
+There is no link clock - communications are synchronized to the falling edge 
+of PRI. This is most effective when PRI timing functions are more accurate 
+than SEC's. As all activity occurs on the same wire, communication is half 
+duplex.
 
-PRI initiates every communication between the devices, down to bit level 
+PRI initiates every communication between the devices down to bit level 
 transfers for both directions. OnePin is also highly tolerant of SEC device 
-failure, reestablishing communications as soon as both devices are available - 
-when the PRI restarts communications SEC will respond and signal its presence.
-
-Each protocol data transaction occurs in packet, with transfers occurring as 
-sequential bits starting with the LSB (2<sup>0</sup>). As all activity occurs 
-on the same wire, communications are necessarily half duplex.
+failure. PRI can reestablish communications on the first packet when both 
+devices are available - when the PRI restarts communications SEC will respond 
+and signal its presence.
 
 ## Link Transactions
 
-Data is transmitted in packets up to 32 bits in length. The contents of these 
-data packets is arbitrary determined by the application.
+Each OnePin transaction occurs in packet up to 32 bits long. Data transfers 
+occur as sequential bits starting with the LSB (2<sup>0</sup>). The content
+and meaning of these data packets are determined by the application.
 
 There are 5 basic signals used for communications (Write0, Write1, Read,
 Reset/Presence) described below. The timing (length) of the first part of the 
-signal (header or preamble) identifies the type of signal to follow.
+signal (header or preamble) identifies the signal type.
 
 Transmission of a packet begins with PRI initiating a Reset Signal, then:
 - To write data to SEC, PRI sends a packet using the Write Signal for each bit.

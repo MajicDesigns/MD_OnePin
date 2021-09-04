@@ -89,14 +89,13 @@ $(document).ready(function(){initNavTree('page_link_signals.html',''); initResiz
 <div class="contents">
 <div class="textblock"><h2>Overview</h2>
 <p >OnePin is a communications link is between a Primary device (PRI) and a Secondary device (SEC). The PRI is assumed to have more computational power be more capable than the SEC, which is envisaged as a small embedded processor providing local control for a sensor or actuator.</p>
-<p >OnePin operates using just one I/O pin and electrical ground per device pair, switching the direction of signal flow according to a timer based protocol implemented in both the PRI and SEC. The electrical connections is dependent on the hardware implementation, which primarily needs to ensure that the digital HIGH and LOW signal voltages are are compatible between devices.</p>
-<p >Electrically, the link is idle HIGH and communications is effected by pulling the link LOW. When the I/O pins are set to input mode in the PRI or SEC they are be pulled HIGH using the processor's internal pullup resistors (INPUT_PULLUP). However, a external pullup is also possible and compatible withe the oprations of the OnePin library.</p>
-<p >The communications link timing is divided into fixed time slots (T) and all protocol timing is expressed as as multiples of T. There is no system clock - communications are synchronized to the falling edge of PRI. This means that PRI timing should be more accurate than SEC timing, which only responds to PRI.</p>
-<p >PRI initiates every communication between the devices, down to bit level transfers for both directions. OnePin is also highly tolerant of SEC device failure, reestablishing communications as soon as both devices are available - when the PRI restarts communications SEC will respond and signal its presence.</p>
-<p >Each protocol data transaction occurs in packet, with transfers occurring as sequential bits starting with the LSB (2<sup>0</sup>). As all activity occurs on the same wire, communications are necessarily half duplex.</p>
+<p >OnePin works using just one digital I/O pin and electrical ground per device pair, switching the direction of signal flow according to a timer based protocol implemented in both the PRI and SEC. The electrical connection depends on the hardware implementation, which mainly needs to ensure that the digital HIGH and LOW signal voltages are are compatible between devices.</p>
+<p >Electrically, the link is idle HIGH and communications is effected by pulling the link LOW. When the I/O pins are set to input mode in the PRI or SEC they are pulled HIGH using internal pullup resistors (INPUT_PULLUP). However, an external pullup is also possible and compatible with the operations of the OnePin library.</p>
+<p >The communications link timing is divided into fixed time slots T microseconds (&micro;s) long and all protocol timing is expressed as as multiples of T. There is no link clock - communications are synchronized to the falling edge of PRI. This is most effective when PRI timing functions are more accurate than SEC's. As all activity occurs on the same wire, communication is half duplex.</p>
+<p >PRI initiates every communication between the devices down to bit level transfers for both directions. OnePin is also highly tolerant of SEC device failure. PRI can reestablish communications on the first packet when both devices are available - when the PRI restarts communications SEC will respond and signal its presence.</p>
 <h2>Link Transactions</h2>
-<p >Data is transmitted in packets up to 32 bits in length. The contents of these data packets is arbitrary determined by the application.</p>
-<p >There are 5 basic signals used for communications (Write0, Write1, Read, Reset/Presence) described below. The timing (length) of the first part of the signal (header or preamble) identifies the type of signal to follow.</p>
+<p >Each OnePin transaction occurs in packet up to 32 bits long. Data transfers occur as sequential bits starting with the LSB (2<sup>0</sup>). The content and meaning of these data packets are determined by the application.</p>
+<p >There are 5 basic signals used for communications (Write0, Write1, Read, Reset/Presence) described below. The timing (length) of the first part of the signal (header or preamble) identifies the signal type.</p>
 <p >Transmission of a packet begins with PRI initiating a Reset Signal, then:</p><ul>
 <li>To write data to SEC, PRI sends a packet using the Write Signal for each bit.</li>
 <li>To read data from SEC, PRI initiates a Read Signal for each bit until a packet has been received.</li>
@@ -135,7 +134,7 @@ $(document).ready(function(){initNavTree('page_link_signals.html',''); initResiz
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="index.html">OnePin Lighweight Comms link</a></li>
-    <li class="footer">Generated on Fri Sep 3 2021 13:07:56 for One Pin Comms Link by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.2 </li>
+    <li class="footer">Generated on Sat Sep 4 2021 16:21:57 for One Pin Comms Link by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.2 </li>
   </ul>
 </div>
 </body>

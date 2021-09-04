@@ -2,9 +2,8 @@
 /**
 \mainpage OnePin Lighweight Comms link
 
-This library is designed to provide a lightweight software-only 
-implementation for a single wire serial point-to-point link between 
-two devices.
+This library provides a lightweight software-only implementation 
+for a single wire serial point-to-point link between two devices.
 
 OnePin uses a single digital I/O line and ground to communicate 
 between a primary and a secondary device. The primary always initiates 

@@ -4,30 +4,26 @@
 /**
 \page pageImplementation Library Implementation Overview
 ## Overview
-The library is implemented as a class MD_OnePin to implement the PRI 
-side of the link. This has primitives to read, write and reset the link 
-interface (basically all the signals), and is implemented just using 
-documented Arduino library calls (ie, no assembler, timer or other hardware 
-specific features). This part is designed to be portable across architectures.
+The library is implemented as the C++ class MD_OnePin on the PRI side node. 
+This has primitives to read, write and reset the link interface (basically 
+all the defined signals), and is implemented just using documented Arduino 
+library calls (ie, no assembler, timer or other hardware specific features). 
+This library is designed to be portable across architectures.
 
-The SEC side is implemented as 'C' code that responds to the PRI signalling.
+The SEC side is implemented as 'C' code that responds to the PRI signaling.
 The library's example SEC implementations detect and time the PRI initiating 
-signal in and Interrupt Service Routine (ISR), setting a flag for the main 
-loop() to do most of the processing. The majority of the SEC can be written
-using portable functions, but it is possible that for some applications a 
-more low level approach may be required to implement the same, or similar, 
-logic. In other words, the SEC node is application dependent.
+signal using an Interrupt Service Routine (ISR), with most of the processing 
+completed in the main loop(). The majority of the SEC can be written using 
+portable functions, but it is possible that for some applications a more low 
+level approach may be required to implement the same, or similar, logic. 
+In other words, the SEC node is application dependent.
 
-The example SEC use an ISR tied to an external interrupt connected to the PRI 
-digital I/O. However, the same could work off other suitable interrupt types, 
-such as pin change interrupts.
+The example SEC use an ISR tied to an external interrupt connected to PRI 
+digital I/O. However the same could work off other suitable interrupt types
+(eg, pin change interrupts).
 
-The main loop() uses the flag set in the ISR then uses this information to
-implement the remaining protocol response and reconstruct data packets. In
-this way the majority of the processing is implemented outside the ISR.
-
-As the two ends of the link both read and write to the link, PRI and SEC 
-orchestrate changing the I/O pin between INPUT and OUTPUT. These changes 
+As the two ends of the link both read and write on the same wire, PRI and 
+SEC orchestrate changing the I/O pin between INPUT and OUTPUT. These changes 
 are described in the section below.
 
 ## Tailoring implementations
@@ -35,19 +31,20 @@ The packet size from PRI to SEC and SEC to PRI can be different sizes,
 between 1 and 32 bits. PRI to SEC is expected to be larger as this flow
 may include configuration parameters, command codes, queries, etc. SEC
 to PRI is likely to consist of status and other 'lightweight' information.
-In any event, the bits per packet for both flows are defined in the
-MD_OnePin_Protocol.h header file, the class constructor for MD_OnePin() and
-the SEC code implementation.
+In any event, the default bits per packet for both flows are defined in the
+MD_OnePin_Protocol.h header file. This can be overridden in the class 
+constructor for MD_OnePin() and the SEC code implementation.
 
-At microsecond time intervals, higher level libraries introduce noticeable
-time delays when switching I/O pins between INPUT/OUTPUT and reading/writing 
-writing to digital outputs. The PRI implementation measures an average 
-value for this in begin() and adjusts timing parameters/delays to take 
+At microsecond time intervals, the higher level libraries introduce noticeable
+time delays when switching I/O pins between INPUT/OUTPUT using pinMode() and 
+and when reading/writing to digital outputs using the digitalRead/Write() 
+functions. The PRI implementation measures an average value for these in 
+begin() and adjusts timing parameters/delays when communicating to take 
 these into account.
 
 Another source of potential issues are the timing gap between packet detection
-in SEC and the processing of the packet in loop(). For short T slots it is 
-possibler that PRI has moved on through the signal becore SEC has started its 
+in SEC and the processing of the packet in the SEC loop(). For short T it is 
+possible that PRI has moved on through the signal before SEC has started its 
 processing. This is especially likely when there is a considerable computing 
 disparity between PRI and SEC (for example, a 16Mhz clock compared to 8MHz). 
 
@@ -56,9 +53,17 @@ The base time slot T is defined as OPT and all other timing parameters are
 derived from this. Changing this single constant value is the correct way to 
 fine-tune timing related communications issues.
 
+Debugging two two sides of the link can be a bit tricky. The main reason for
+debugging is usually to determine the timing interaction between the two sides. 
+This means that any non-trivial debug output interfere with what is being 
+measured. The library and example code uses a separate digital output to mark 
+(via an I/O toggle) when key events happen. This allows the Serial signal and 
+the output from PRI and SEC to be captured and compared using a Digital Analyzer.
+
 ## Message Processing
-This section descibes the detailed implementation and coordination between 
-PRI and SEC implementation of the OnePin protocol.
+This section describes the detailed implementation and coordination between 
+PRI and SEC implementation of the OnePin protocol. The symbolic defines are
+timing values calculated in MD_OnePin_Protocol.h
 
 ### Reset/Presence Signal
 -# The PRI pulls the signal low for OPT_RST_SIGNAL time.
@@ -88,7 +93,7 @@ PRI and SEC implementation of the OnePin protocol.
 
 /**
  * \file
- * \brief Code file for MD_OnePin library class (Comms protocol timing).
+ * \brief Code file for MD_OnePin library class (PRI implementation).
  */
 
 #ifndef OP_DEBUG

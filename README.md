@@ -1,10 +1,9 @@
-# Library for lightweight One Pin serial link interface
+# Library for One Pin serial link interface
 
-[![arduino-library-badge](https://www.ardu-badge.com/badge/MD_OneWire.svg?)](https://www.ardu-badge.com/MD_OnePin)
+[![arduino-library-badge](https://www.ardu-badge.com/badge/MD_OnePin.svg?)](https://www.ardu-badge.com/MD_OnePin)
 
-This library is designed to provide a lightweight software-only 
-implementation for a single wire serial point-to-point link between 
-two devices.
+This library provides a lightweight software-only  implementation 
+for a single wire serial point-to-point link between two devices.
 
 OnePin uses a single digital I/O line and ground to communicate 
 between a primary and a secondary device. The primary always initiates 
